@@ -1,15 +1,8 @@
 %% From 
-function k=EigGap(Ar,n)
-%kmax=n*0.25;
-% NM=normrnd(0.1,0.3,[n]);
-% % NM=
-% while (any(NM>1,'all')==1 || any(NM<0,'all')==1)   %%truncartion [0,1]
-% NM(NM>1)=normrnd(0.1,0.3);
-% NM(NM<0)=normrnd(0.1,0.3);
-% end
-for r=1:1
-    A=full(cell2mat(Ar(r)));
-%     A=full(Ar);
+function k=EigGap(A)
+
+% realizations=size(Ar,1);
+n=size(A,2);
 dens=2*sum(A,'all')/(n*(n-1));
 rand('seed',100); % reseed so you get a similar picture
 G = rand(n,n) < dens;
@@ -40,12 +33,10 @@ end
 % eigengap is non-unique
 for j=1:n
 if gap(j)>delta
-k(r)=j;
+k=j;
 end
 end
-% [K,~] = min(find(gap<delta));
-% k(r)=K-1;
-end
-k=mode(k);
+
+% k=mode(k);
 end
 
