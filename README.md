@@ -11,9 +11,9 @@ In this work, we introduce a new multiplex community detection method that ident
 
 ## Description
 
-Start with finding the number of total communities per layer, common communities, and private communities per layer.
-Run the function ```EigGap.m``` to obtain the number of communities per layer.
+Use ```findingk.m``` to find the number of common communities and the number of private and total communities per layer. If the number of communities is known, this step can be skipped.
 
-After you run ```EigGap.m``` you should find...
+
+
 
 
