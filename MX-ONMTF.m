@@ -1,6 +1,6 @@
 %%%%% Multiplex with common communities
 %%%%% L layers
-function [H_bestNMI,Hl_bestNMI,NMI_realization,averagedNMI,stdNMI]=MyLlayersMultiplexOrthSynt(Alr,GTlr,k,kc,kpl)
+function [H_bestNMI,Hl_bestNMI,NMI_realization,averagedNMI,stdNMI]=MX-ONMTF(Alr,GTlr,k,kc,kpl)
 % Alr is cell array with R realizations of the networks. Each cell contains another L cells array with the adjacency matrices of each L layer
 % k is an L vector with the total number of communities per layer
 % kc is the number of common communities
@@ -15,11 +15,8 @@ for r=1:realizations
 Al=Alr{r};
 GTl=GTlr{r};
 L=size(Al,2);
-n=size(Al{1},2);
-GTSup=GTl{1};
-for l=2:L
-GTSup=[GTSup;GTl{l}];
-end
+n=size(Al{1},2); 
+GTSup=vertcat(GTl{:});
 
 %% Running the code multiple times and finding NMI
 runs=20;
@@ -103,10 +100,7 @@ for l=1:L
     end
 end
 
-ClustersSupra=Il{1};
-for l=2:L
-ClustersSupra=[ClustersSupra;Il{l}]; 
-end
+ClustersSupra=[vertcat(Il{:}); 
 
 %% NMI
 for l=1:L
