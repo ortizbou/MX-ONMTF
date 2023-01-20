@@ -1,5 +1,7 @@
 Joint work with Brooke Spring 2023
 January 20th: Discuss the multiplex community detection article, introduce the network datasets and go over the code
+Run findingk.m with the data (cell array) and find k, kc, kpr. If k<3 for any of the layers, discard the results. Similarly, if k> 20 for any of the layers, discard 
+the results. If this is the case, fix k=6 for each layer, kc=3, kpl=3. Run MX-ONMTF with modularity density for real networks.
 January 27th (need to change meeting time): initially run the algorithm with different K rather than learning it from data, go over the initial run of the algorithm on 20 ERN networks and discuss potential problems
 Feb 3rd (need to change meeting time): choose K using the algorithm, characterize the common networks
 Feb 10th:
