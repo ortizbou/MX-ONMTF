@@ -8,7 +8,7 @@ Feb 3rd (need to change meeting time): change delta in EigenGap to see if we get
 sure that you take the same percentage of edges across all subjects. 
 - use the threshold A, \hat{A} and rerun EigenGap to check how K changes
 - get the visualization code from Meiby
-Feb 10th:
+Feb 10th: use K=6, focus on visualizing the clusters for each layer. Next, transfer the maps to topomaps. (share topomap code)
 Feb 17th: Apply to CRN networks for comparison
 Feb 24th (need to meet earlier)
 March 3rd (cancel)
