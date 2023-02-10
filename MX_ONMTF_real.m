@@ -76,24 +76,41 @@ for j=1:runs
     end
 
 %% Finding Clusters
+% 
+% for l=1:L
+%     Hl{l}=[H,Hl{l}];
+%     for m=1:(kc-(k(l)-kpl(l)))
+%     pos=patchmult(Al{l},Hl{l},kc);
+%     Hl{l}(:,pos(m))=0;
+%     end
+%     [~,Il{l}] = max(Hl{l},[],2);
+% end
+% 
+% for l=1:L
+%     for m=1:kpl(l)
+%     a=find(Il{l}==(kc+m));
+%     Il{l}(a)=Il{l}(a)+sum(k(1:(l-1)));
+%     end
+% end
+% 
+% ClustersSupra=[vertcat(Il{:})]; 
 
-for l=1:L
-    Hl{l}=[H,Hl{l}];
-    for m=1:(kc-(k(l)-kpl(l)))
-    pos=patchmult(Al{l},Hl{l},kc);
-    Hl{l}(:,pos(m))=0;
+Hall=horzcat(Hl{:});
+for g=1:kc
+    for nodes=1:n
+    if all(H(nodes,g)>Hall(nodes,:))
+    for l=1:L    
+        Il{l}(nodes)=g;
     end
-    [~,Il{l}] = max(Hl{l},[],2);
-end
-
-for l=1:L
-    for m=1:kpl(l)
-    a=find(Il{l}==(kc+m));
-    Il{l}(a)=Il{l}(a)+sum(k(1:(l-1)));
+    end
     end
 end
-
-ClustersSupra=[vertcat(Il{:})]; 
+nodes=find(Il{1}==0);
+    for l=1:L
+        [~,il(nodes)] = max(Hl{l}(nodes,:),[],2);
+        Il{l}(nodes)= il(nodes)+kc+sum(k(1:(l-1)));
+    end  
+ClustersSupra=[vertcat(Il{:})]'; 
 
 %% Modularity
 for l=1:L
