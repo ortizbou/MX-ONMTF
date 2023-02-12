@@ -94,7 +94,9 @@ for j=1:runs
 % end
 % 
 % ClustersSupra=[vertcat(Il{:})]; 
-
+for l=1:20
+    Il{l}=zeros(64,1);
+end
 Hall=horzcat(Hl{:});
 for g=1:kc
     for nodes=1:n
