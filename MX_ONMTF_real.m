@@ -95,7 +95,7 @@ for j=1:runs
 % 
 % ClustersSupra=[vertcat(Il{:})]; 
 for l=1:20
-    Il{l}=zeros(64,1);
+    Il{l}=zeros(n,1);
 end
 Hall=horzcat(Hl{:});
 for g=1:kc
@@ -109,6 +109,7 @@ for g=1:kc
 end
 nodes=find(Il{1}==0);
     for l=1:L
+        il=zeros(n,1);
         [~,il(nodes)] = max(Hl{l}(nodes,:),[],2);
         Il{l}(nodes)= il(nodes)+kc+sum(k(1:(l-1)));
     end  
