@@ -12,8 +12,9 @@ Feb 10th: use K=6, focus on visualizing the clusters for each layer. Next, trans
 Feb 17th: Focus on visualizing the clusters, determine clusters that occur in the majority of the layers and focus on visualizing clusters that are common across the
 majority (>10 layers), find out why the node labels differ for the same cluster across layers. Implement thresholding (described above) to the input A matrices and rerun the
 algorithm.
-Feb 24th (need to meet earlier)
-March 3rd (cancel)
+Feb 24th: create intercluster strength of all edges between the cluster nodes identified (with A threshold of 0.9 matrix). For the EEG brain plots, remove the lines and edit label font to be more visable.
+Email the figures for the paper by Wednesday. If time, play with thresholds (delta, eiggap)
+March 3rd (cancel). Meeting 1pm EST Thursday 3/2.
 March 10th: spring break
 March 17th:
 March 24th:
