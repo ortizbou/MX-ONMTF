@@ -14,9 +14,9 @@ majority (>10 layers), find out why the node labels differ for the same cluster 
 algorithm.
 Feb 24th: create intercluster strength of all edges between the cluster nodes identified (with A threshold of 0.9 matrix). For the EEG brain plots, remove the lines and edit label font to be more visable.
 Email the figures for the paper by Wednesday. If time, play with thresholds (delta, eiggap)
-March 3rd (cancel). Meeting 1pm EST Thursday 3/2.
+March 3rd (cancel). Meeting 11:30Am FRiday .
 March 10th: spring break
-March 17th:
+March 17th: move to Thursday 16th, 10AM
 March 24th:
 March 31st:
 April 7th:
