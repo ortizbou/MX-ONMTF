@@ -16,7 +16,9 @@ Feb 24th: create intercluster strength of all edges between the cluster nodes id
 Email the figures for the paper by Wednesday. If time, play with thresholds (delta, eiggap)
 March 3rd (cancel). Meeting 11:30Am FRiday .
 March 10th: spring break
-March 17th: move to Thursday 16th, 10AM
+March 17th: move to Thursday 16th, 10AM. Focus on "Using connectome-based predictive modeling to predict individual behavior from brain connectivity" paper
+Brainstorm ways to relate either kc or kp to identifying individual subjects and metrics to do so. Can also review "Functional connectome fingerprinting: identifying individuals using patterns of brain connectivity"
+-Possible other algorithms focusing on private communities.
 March 24th:
 March 31st:
 April 7th:
