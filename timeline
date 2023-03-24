@@ -19,7 +19,11 @@ March 10th: spring break
 March 17th: move to Thursday 16th, 10AM. Focus on "Using connectome-based predictive modeling to predict individual behavior from brain connectivity" paper
 Brainstorm ways to relate either kc or kp to identifying individual subjects and metrics to do so. Can also review "Functional connectome fingerprinting: identifying individuals using patterns of brain connectivity"
 -Possible other algorithms focusing on private communities.
-March 24th:
+March 24th: Starting with MX-ONMTF, identify the whole set of communities, i.e., both common and private. For each node, generate a community membership vector across subjects.
+g_i(k)=Number of times node i is assigned to the kth community across 20 subjects, where k=1,2,3,....,K (total number of communities.) Normalize g_{i} to obtain a 
+probability mass function p_{i}=g_{i}/sum_{i} g_{i}. Compute the entropy for each node, H_{i}, based on p_{i}, H_{i}= - sum p_{i}log2p_{i}. This number should always 
+be positive. Small entropy values would imply high consistency across subjects and vice versa. We can plot H_{i} over the brain topomap.
+Implement a similar idea with GenLouvain algorithm, \gamma=1, \omega=1 to start with. 
 March 31st:
 April 7th:
 April 14th:
