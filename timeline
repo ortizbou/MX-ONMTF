@@ -24,7 +24,8 @@ g_i(k)=Number of times node i is assigned to the kth community across 20 subject
 probability mass function p_{i}=g_{i}/sum_{i} g_{i}. Compute the entropy for each node, H_{i}, based on p_{i}, H_{i}= - sum p_{i}log2p_{i}. This number should always 
 be positive. Small entropy values would imply high consistency across subjects and vice versa. We can plot H_{i} over the brain topomap.
 Implement a similar idea with GenLouvain algorithm, \gamma=1, \omega=1 to start with. 
-March 31st:
+March 31st: fix the code based on the new formulas, clarified ideas. p_{i} = g_{i}/sum_{k}g_{i}(k),p_{i} is a vector K x 1 
+H(i) = -sum(k)p_{i}(k)log2p_{i}(k)
 April 7th:
 April 14th:
 April 21st:
