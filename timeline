@@ -30,5 +30,5 @@ April 7th: visualize the entropy values in a topoplot; study reproducibility of 
 procedure 20 times (take a different subject out in each run); quantify the consistency of the results-->compute NMI between the community structure of the original run
 (the one with 20 subjects) and each of the 20 runs, calculate the mean NMI
 April 14th: find the ks with the new data, and work with processing the data for the old one.
-April 21st:
-April 27th: last meeting
+April 21st: plotting the ks with new data
+April 27th: last meeting, information regarding next steps, COV_week_4_27_23
