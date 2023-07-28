@@ -1,11 +1,11 @@
 %% Applying Symmetric Nonnegative Matrix 3-Factorization with orthogonal restriction to each layer separately
 %%%% 50 runs are performed and the U1 with the best NMI is chosen. This is
 %%%% repeated over 100 realizations of the same network and the averaged
-%%%% NMI is reported. Try diferent values of k
+%%%% NMI is reported. Try different values of k
 function [U1_bestNMI,NMI]=ONMTF(A,GT,k)
 
 runs=50;
-eta=1; 
+eta=0.5; 
 
 % A=Alr{1};
 % GT=GTlr{1};
@@ -28,7 +28,7 @@ for i=1:1000
     if all(isnan(C1new),'all')==1
         C1new=rand([k1,k1]);
     end  
-    if (all(norm(U1-U1new)<1e-6,'all') && all(norm(C1-C1new)<1e-6,'all'))
+    if (all(norm(U1-U1new)<1e-3,'all') && all(norm(C1-C1new)<1e-3,'all'))
         break
     end  
     U1=U1new;
