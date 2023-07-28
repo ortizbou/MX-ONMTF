@@ -1,4 +1,3 @@
-%% From 
 function k=EigGap(A)
 
 % realizations=size(Ar,1);
