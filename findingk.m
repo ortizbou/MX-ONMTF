@@ -1,4 +1,7 @@
-%% Finding the number of common communities, and the number of private and total commmunities per layer.
+% This function is used in the main algorithm of MX-ONMTF to find the number of common communities, private communities, and total communities per layer.
+% This function is explained in Algorithm 1 in [1]
+% Reference: 
+% [1] “Community detection in multiplex networks based on orthogonal nonnegative matrix tri-factorization” Authors: Meiby Ortiz-Bouza and Selin Aviyente
 L=size(Al,2);
 
 for l=1:L
@@ -13,18 +16,18 @@ X=[U{:}]';
 Z=linkage(X);
 
 kc=0;
-cut=size(Z,1);
+cut=ceil(size(Z,1)/2)-1;
 for i=2:size(X,1)-1 
     if max(Z(i-1,1:2))<=size(X,1)
         kc=kc+1;
     end
     d(i)=(Z(i,3)-Z(i-1,3))/Z(i-1,3);
     if d(i)>=0.5
-    cut=i;
+    cut=i-1;
     break
     end
 end
 
 for l=1:L
-kpl(l)=k(l)-length(find((1+sum(k(1:l-1)))<=Z(1:cut,1:2) & Z(1:cut,1:2)<=sum(k(1:l))));
+    kpl(l)=k(l)-length(find((1+sum(k(1:l-1)))<=Z(1:cut,1:2) & Z(1:cut,1:2)<=sum(k(1:l))));
 end
