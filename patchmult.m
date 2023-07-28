@@ -1,10 +1,15 @@
 function [pos,q]=patchmult(a,H,kc)
 
-% This function is used in the main algorithm of MX-ONMTF to post-process H and describe how the membership of the common
-% communities is determined across layers, i.e., which columns of H contain information about
-% the common communities present in layer l. This function is explained in Algorithm 3 in [1]
-% Reference: 
-% [1] “Community detection in multiplex networks based on orthogonal nonnegative matrix tri-factorization” Authors: Meiby Ortiz-Bouza and Selin Aviyente
+%  This function is used in the main algorithm of MX-ONMTF to post-process H and describe how the membership of the common
+%  communities is determined across layers, i.e., which columns of H contain information about
+%  the common communities present in layer l. This function is explained in Algorithm 3 in [1]
+%  Author: Meiby Ortiz-Bouza
+%  Address: Michigan State University, ECE
+%  email: ortizbou@msu.edu
+%
+%
+%  Reference: 
+%  [1] “Community detection in multiplex networks based on orthogonal nonnegative matrix tri-factorization” Authors: Meiby Ortiz-Bouza and Selin Aviyente
 
 [~,n]=size(a);
 [M1,I1] = max(H,[],2);
