@@ -6,6 +6,14 @@ function [H_bestNMI,Hl_bestNMI,NMI_realization,averagedNMI,stdNMI]=MX_ONMTF(Alr,
 % kc is the number of common communities
 % kpl is an L vector with the number of private communities per layer
 % communities membership matrices
+%
+%  Author: Meiby Ortiz-Bouza
+%  Address: Michigan State University, ECE
+%  email: ortizbou@msu.edu
+%
+%
+%  Reference: 
+%  [1] “Community detection in multiplex networks based on orthogonal nonnegative matrix tri-factorization” Authors: Meiby Ortiz-Bouza and Selin Aviyente
 
 eta=1; %% learning rate between (0,1]
 realizations=100;
