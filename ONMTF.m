@@ -4,6 +4,11 @@
 %%%% NMI is reported. Try different values of k
 function [U1_bestNMI,NMI]=ONMTF(A,GT,k)
 
+%  Author: Meiby Ortiz-Bouza
+%  Address: Michigan State University, ECE
+%  email: ortizbou@msu.edu
+
+
 runs=50;
 eta=0.5; 
 
