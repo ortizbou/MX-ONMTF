@@ -2,7 +2,14 @@
 %%%% 50 runs are performed and the U1 with the best NMI is chosen. This is
 %%%% repeated over 100 realizations of the same network and then averaged
 %%%% Modularity is reported. Try different values of k
+
 function [U1_bestMod]=ONMTF_real(A,k)
+
+
+%  Author: Meiby Ortiz-Bouza
+%  Address: Michigan State University, ECE
+%  email: ortizbou@msu.edu
+
 
 runs=50;
 eta=0.5; 
