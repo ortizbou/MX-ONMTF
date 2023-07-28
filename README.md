@@ -12,7 +12,7 @@ In this work, we introduce a new multiplex community detection method that ident
 ## Description and example
 
 Step 1. Use ```findingk.m``` to find the number of common communities and the number of private and total communities per layer. If the number of communities is known, this step can be skipped.
-Step 2. Run the MX-ONMTF method that corresponds to your data, real or synthetic.
+Step 2. Run the MX-ONMTF method that corresponds to your data, real or synthetic. For this, use the file ```Steps.mlx```
 
 
 
