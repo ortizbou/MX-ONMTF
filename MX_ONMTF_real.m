@@ -10,9 +10,8 @@ function [H_best, Hl_best, Clusters]=MX_ONMTF_real(Alr,k,kc,kpl)
 %  Address: Michigan State University, ECE
 %  email: ortizbou@msu.edu
 
-eta=1; %% learning rate between (0,1]
+eta=0.5; %% learning rate between (0,1]
 realizations=1;
-% n=256;
 
 for r=1:realizations
 Al=Alr;
@@ -23,7 +22,7 @@ n=size(Al{1},2);
 runs=20;
 
 for j=1:runs
-    %% Initializing H1,H2,H,S1,S2,G1,G2
+    %% Initializing Hl,H,Sl,Gl
     for l=1:L
     Hl{l}=rand([n,kpl(l)]);
     Sl{l}=diag(rand(kc,1));
@@ -65,9 +64,9 @@ for j=1:runs
 
         Hres=cellfun(@minus,Hl,Hlnew,'Un',0);
         Sres=cellfun(@minus,Sl,Slnew,'Un',0);
-        if (all(norm(Hres{l})<1e-4,'all') && ...
-             all(norm(Sres{l})<1e-4,'all') ...
-        && all(norm(H-Hnew)<1e-4,'all'))
+        if (all(norm(Hres{l})<1e-3,'all') && ...
+             all(norm(Sres{l})<1e-3,'all') ...
+        && all(norm(H-Hnew)<1e-3,'all'))
             break
         end    
     
@@ -79,44 +78,9 @@ for j=1:runs
     end
 
 %% Finding Clusters
-% 
-% for l=1:L
-%     Hl{l}=[H,Hl{l}];
-%     for m=1:(kc-(k(l)-kpl(l)))
-%     pos=patchmult(Al{l},Hl{l},kc);
-%     Hl{l}(:,pos(m))=0;
-%     end
-%     [~,Il{l}] = max(Hl{l},[],2);
-% end
-% 
-% for l=1:L
-%     for m=1:kpl(l)
-%     a=find(Il{l}==(kc+m));
-%     Il{l}(a)=Il{l}(a)+sum(k(1:(l-1)));
-%     end
-% end
-% 
-% ClustersSupra=[vertcat(Il{:})]; 
-for l=1:20
-    Il{l}=zeros(n,1);
-end
-Hall=horzcat(Hl{:});
-for g=1:kc
-    for nodes=1:n
-    if all(H(nodes,g)>Hall(nodes,:))
-    for l=1:L    
-        Il{l}(nodes)=g;
-    end
-    end
-    end
-end
-nodes=find(Il{1}==0);
-    for l=1:L
-        il=zeros(n,1);
-        [~,il(nodes)] = max(Hl{l}(nodes,:),[],2);
-        Il{l}(nodes)= il(nodes)+kc+sum(k(1:(l-1)));
-    end  
-ClustersSupra=[vertcat(Il{:})]'; 
+
+[Il,ClustersSupra] = assigncomm(Alr,H,Hl,kc,k,kpl,L,'same');
+
 
 %% Modularity
 for l=1:L
@@ -126,20 +90,22 @@ Asup=zeros(L*n);
 for l=1:L
     Asupra(1+n*(l-1):n*l,1+n*(l-1):n*l)=Al{l};
 end
-[ModDenSupj,ModDenNormSupj]=ModDen(sum(kpl)+kc,Asupra,ClustersSupra);
+ModDenSupj=ModDen(sum(kpl)+kc,Asupra,ClustersSupra);
 Mod_DenSup(j)=ModDenSupj;
 maxModDenSup=max(Mod_DenSup);
 
 if maxModDenSup==ModDenSupj
-   H_bestNMI{r}=H; 
-   Hl_bestNMI{r}=Hl;   
-%    Sl_bestNMI{r}=Sl; 
-%    Gl_bestNMI{r}=Gl; 
-end   
+   H_best{r}=H; 
+   Hl_best{r}=Hl;   
+%    Sl_best{r}=Sl; 
+%    Gl_best{r}=Gl; 
+   Clusters=ClustersSupra;
+end
 
 end
 
 [ModDen_realization(r),~]= max(Mod_DenSup);
+clear Mod_DenSup
 
 end
 
