@@ -1,7 +1,14 @@
-% This function is used in the main algorithm of MX-ONMTF to find the number of common communities, private communities, and total communities per layer.
-% This function is explained in Algorithm 1 in [1]
-% Reference: 
-% [1] “Community detection in multiplex networks based on orthogonal nonnegative matrix tri-factorization” Authors: Meiby Ortiz-Bouza and Selin Aviyente
+%  This function is used in the main algorithm of MX-ONMTF to find the number of common communities, private communities, and total communities per layer.
+%  This function is explained in Algorithm 1 in [1]
+%
+%  Author: Meiby Ortiz-Bouza
+%  Address: Michigan State University, ECE
+%  email: ortizbou@msu.edu
+%
+%
+%  Reference: 
+%  [1] “Community detection in multiplex networks based on orthogonal nonnegative matrix tri-factorization” Authors: Meiby Ortiz-Bouza and Selin Aviyente
+
 L=size(Al,2);
 
 for l=1:L
