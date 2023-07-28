@@ -1,11 +1,14 @@
 %%%%% Multiplex with common communities
 %%%%% L layers
-function [H_bestNMI,Hl_bestNMI,NMI_realization,averagedNMI,stdNMI]=MX_ONMTF(Alr,GTlr,k,kc,kpl)
-% Alr is cell array with R realizations of the networks. Each cell contains another L cells array with the adjacency matrices of each L layer
-% k is an L vector with the total number of communities per layer
-% kc is the number of common communities
-% kpl is an L vector with the number of private communities per layer
-% communities membership matrices
+function [H_bestNMI,Hl_bestNMI,NMI_realization,averagedNMI,stdNMI, Clusters]=MX_ONMTF(Alr,GTlr,k,kc,kpl)
+%  Input: Alr is cell array with r realizations of the networks. Each cell contains another L cells array with the adjacency matrices of each layer
+%         k: L vector with the total number of communities per layer
+%         kc: number of common communities
+%         kpl: L vector with the number of private communities per layer
+%         communities membership matrices
+%  Output: H_bestNMI and Hl_bestNMI: the embedding matrices of the common and private communities with the best NMI for r realizations
+%          NMI_realization, averagedNMI, stdNMI:  NMI values at each realization and the average and standard deviation over these realizations, respectively.
+%          Clusters: n*L vector with the labels of the communities
 %
 %  Author: Meiby Ortiz-Bouza
 %  Address: Michigan State University, ECE
