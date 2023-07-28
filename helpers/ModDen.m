@@ -1,6 +1,10 @@
 function [ModularityDensity,ModularityDensityNorm]=ModDen(k,A,I)
  
-%%% Inputs k: number of communities, I: cluster labels, A: Adjacency matrix
+%%% Input k: number of communities, I: cluster labels, A: Adjacency matrix
+% This function computes the multilayer Modularity Density and Normalized Modularity Density of a community partition of the network using the labels and the adjacency matrix
+% Modularity Density is used to quatify a community structure when the ground truth (true labels) are unknown.
+% 
+% ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
  
 %  LV=zeros(1,k);
