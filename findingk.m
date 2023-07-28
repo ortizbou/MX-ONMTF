@@ -9,6 +9,8 @@
 %  Reference: 
 %  [1] “Community detection in multiplex networks based on orthogonal nonnegative matrix tri-factorization” Authors: Meiby Ortiz-Bouza and Selin Aviyente
 
+function [kc,k,kpl]=findingk(Al)
+
 L=size(Al,2);
 
 for l=1:L
@@ -37,4 +39,6 @@ end
 
 for l=1:L
     kpl(l)=k(l)-length(find((1+sum(k(1:l-1)))<=Z(1:cut,1:2) & Z(1:cut,1:2)<=sum(k(1:l))));
+end
+
 end
