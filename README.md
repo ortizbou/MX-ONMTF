@@ -7,9 +7,7 @@ https://arxiv.org/abs/2205.00626v2
 ## Introduction
 In this work, we introduce a new multiplex community detection method that identifies communities that are common across layers as well as those that are unique to each layer. The proposed method, Multiplex Orthogonal Nonnegative Matrix Tri-Factorization, represents the adjacency matrix of each layer as the sum of two low-rank matrix factorizations  corresponding to the common and private communities, respectively. Unlike most of the existing methods which require the number of communities to be pre-determined, the proposed method also introduces a two stage method to determine the number of common and private communities.
 
-![image](https://github.com/ortizbou/MX-ONMTF/assets/92049169/f163d6b6-f077-4ff5-bb3d-27fa20531956)
-
-%<img width="488" alt="Framework_new" src="https://user-images.githubusercontent.com/92049169/212778011-43e63d5d-f825-485e-85d0-78f23a2c0f9e.png">
+![image](https://github.com/ortizbou/MX-ONMTF/assets/92049169/7c7631c5-eb38-4673-bc7d-c7d40d746bed)
 
 ## Description and example
 
