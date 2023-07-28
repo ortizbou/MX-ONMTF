@@ -1,11 +1,11 @@
 %% Applying Symmetric Nonnegative Matrix 3-Factorization with orthogonal restriction to each layer separately
 %%%% 50 runs are performed and the U1 with the best NMI is chosen. This is
-%%%% repeated over 100 realizations of the same network and the averaged
-%%%% Modularity is reported. Try diferent values of k
+%%%% repeated over 100 realizations of the same network and then averaged
+%%%% Modularity is reported. Try different values of k
 function [U1_bestMod]=ONMTF_real(A,k)
 
 runs=50;
-eta=1; 
+eta=0.5; 
 
 % A=Alr{1};
 [~,n]=size(A);
@@ -13,7 +13,7 @@ eta=1;
 %% Running the code multiple times and finding NMI
 
 for j=1:runs
-    %% Initializing U1,U2,C1,C2,D
+    %% Initializing U1,U2
 U1=rand([n,k]);
 C1=diag(rand([k,1]));
 
