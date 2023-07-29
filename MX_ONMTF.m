@@ -18,7 +18,7 @@ function [H_bestNMI,Hl_bestNMI,NMI_realization,averagedNMI,stdNMI, Clusters]=MX_
 %  Reference: 
 %  [1] “Community detection in multiplex networks based on orthogonal nonnegative matrix tri-factorization” Authors: Meiby Ortiz-Bouza and Selin Aviyente
 
-eta=1; %% learning rate between (0,1]
+eta=0.5; %% learning rate between (0,1]
 realizations=100;
 
 for r=1:realizations
@@ -74,9 +74,9 @@ for j=1:runs
 
         Hres=cellfun(@minus,Hl,Hlnew,'Un',0);
         Sres=cellfun(@minus,Sl,Slnew,'Un',0);
-        if (all(norm(Hres{l})<1e-4,'all') && ...
-             all(norm(Sres{l})<1e-4,'all') ...
-        && all(norm(H-Hnew)<1e-4,'all'))
+        if (all(norm(Hres{l})<1e-3,'all') && ...
+             all(norm(Sres{l})<1e-3,'all') ...
+        && all(norm(H-Hnew)<1e-3,'all'))
             break
         end    
     
@@ -89,23 +89,7 @@ for j=1:runs
 
 %% Finding Clusters
 
-for l=1:L
-    Hl{l}=[H,Hl{l}];
-    for m=1:(kc-(k(l)-kpl(l)))
-    pos=patchmult(Al{l},Hl{l},k(l));
-    Hl{l}(:,pos(m))=0;
-    end
-    [~,Il{l}] = max(Hl{l},[],2);
-end
-
-for l=1:L
-    for m=1:kpl(l)
-    a=find(Il{l}==(kc+m));
-    Il{l}(a)=Il{l}(a)+sum(k(1:(l-1)));
-    end
-end
-
-ClustersSupra=[vertcat(Il{:})]; 
+[Il,ClustersSupra] = assigncomm(Alr,H,Hl,kc,k,kpl,L,'same');
 
 %% NMI
 for l=1:L
@@ -121,6 +105,7 @@ if maxNMI==NMIsupj
    Hl_bestNMI{r}=Hl;   
 %    Sl_bestNMI{r}=Sl; 
 %    Gl_bestNMI{r}=Gl; 
+    Clusters=ClustersSupra;
 end   
 
 if norm(maxNMI-1)<1e-3
@@ -131,7 +116,7 @@ end
 end
 
 [NMI_realization(r),~]= max(NMI_sup);
-
+clear NMI_sup
 end
 
 averagedNMI=mean(NMI_realization);
