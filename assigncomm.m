@@ -1,4 +1,8 @@
 function [Il,ClustersSupra]=assigncomm(Al,H,Hl,kc,k,kpl,L,mode)
+%
+%  Author: Meiby Ortiz-Bouza
+%  Address: Michigan State University, ECE
+%  email: ortizbou@msu.edu
 
 [n,~]=size(H);
 
