@@ -39,6 +39,9 @@ end
 
 for l=1:L
     kpl(l)=k(l)-length(find((1+sum(k(1:l-1)))<=Z(1:cut,1:2) & Z(1:cut,1:2)<=sum(k(1:l))));
+    if (k(l)-kc)>kpl(l)
+    kpl(l)=k(l)-kc;
+    end
 end
 
 end
