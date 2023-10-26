@@ -26,7 +26,7 @@ Z=linkage(X);
 
 kc=0;
 cut=ceil(size(Z,1)/2)-1;
-for i=2:cut 
+for i=2:size(X,1)-1
     if max(Z(i-1,1:2))<=size(X,1)
         kc=kc+1;
     end
