@@ -33,7 +33,7 @@ for j=1:runs
     H=rand([n,kc]);
 
     %% Iterative update
-    for i=1:1000
+    for i=1:2000
         for l=1:L
             Hlnew{l}=Hl{l}.*((Al{l}*Hl{l}*Gl{l} + Hl{l}*Hl{l}'*H*Sl{l}*H'*Hl{l}*Gl{l}')./(H*Sl{l}*H'*Hl{l}*Gl{l} + Hl{l}*Hl{l}'*Al{l}*Hl{l}*Gl{l})).^eta;
             if all(isnan(Hlnew{l}),'all')==1
