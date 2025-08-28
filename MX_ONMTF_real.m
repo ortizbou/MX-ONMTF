@@ -81,7 +81,7 @@ for j=1:runs
 
 %% Finding Clusters
 
-[Il,ClustersSupra] = assigncomm(Alr,H,Hl,kc,k,kpl,L,'same',0.8);
+[Il,ClustersSupra] = assigncomm(Alr,H,Hl,kc,k,kpl,L,'same',0.8);  %% choose the threshold for the assignment of teh common communities
 
 
 % %% Modularity
@@ -128,3 +128,4 @@ end
 
 
 end
+
