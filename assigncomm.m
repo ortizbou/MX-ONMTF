@@ -1,4 +1,4 @@
-function [Il,ClustersSupra]=assigncomm(Al,H,Hl,kc,k,kpl,L,mode)
+function [Il,ClustersSupra]=assigncomm(Al,H,Hl,kc,k,kpl,L,mode,perc)
 %
 %  Author: Meiby Ortiz-Bouza
 %  Address: Michigan State University, ECE
@@ -39,7 +39,7 @@ elseif strcmp(mode,'same')
         Hall=horzcat(Hl{layers});
         for l=layers 
 %             if (all(Hc{l}(nodes,g)>Hall(nodes,:)) && all(Hc{l}(nodes,g)>=Hc{l}(nodes,:)))
-            if (nnz(Hc{l}(nodes,g)>Hall(nodes,:))>0.8*size(Hall,2)) %&& all(Hc{l}(nodes,g)>=Hc{l}(nodes,:)))         
+            if (nnz(Hc{l}(nodes,g)>Hall(nodes,:))>perc*size(Hall,2)) %&& all(Hc{l}(nodes,g)>=Hc{l}(nodes,:)))         
               Il{l}(nodes)=g;
             end
         end
