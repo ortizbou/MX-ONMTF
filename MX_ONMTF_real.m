@@ -81,34 +81,49 @@ for j=1:runs
 
 %% Finding Clusters
 
-[Il,ClustersSupra] = assigncomm(Alr,H,Hl,kc,k,kpl,L,'same');
+[Il,ClustersSupra] = assigncomm(Alr,H,Hl,kc,k,kpl,L,'same',0.8);
 
 
-%% Modularity
+% %% Modularity
+% for l=1:L
+% [ModDenj{l},~]=ModDen(k(l),Al{l},Il{l});
+% end
+% Asup=zeros(L*n);
+% for l=1:L
+%     Asupra(1+n*(l-1):n*l,1+n*(l-1):n*l)=Al{l};
+% end
+% ModDenSupj=ModDen(sum(kpl)+kc,Asupra,ClustersSupra);
+% Mod_DenSup(j)=ModDenSupj;
+% maxModDenSup=max(Mod_DenSup);
+% 
+% if maxModDenSup==ModDenSupj
+%    H_best{r}=H; 
+%    Hl_best{r}=Hl;   
+%    Sl_best{r}=Sl; 
+% %    Gl_best{r}=Gl; 
+%    Clusters=ClustersSupra;
+% end
+%% Trace minimization
 for l=1:L
-[ModDenj{l},ModDenNormj{l}]=ModDen(k(l),Al{l},Il{l});
+    tr(l)=norm(Al{l}-(H*Sl{l}*H'+Hl{l}*Gl{l}*Hl{l}'),'fro')+trace(Hl{l}'*Hl{l}-eye(kpl(l)));
 end
-Asup=zeros(L*n);
-for l=1:L
-    Asupra(1+n*(l-1):n*l,1+n*(l-1):n*l)=Al{l};
-end
-ModDenSupj=ModDen(sum(kpl)+kc,Asupra,ClustersSupra);
-Mod_DenSup(j)=ModDenSupj;
-maxModDenSup=max(Mod_DenSup);
+trall(j)=sum(tr)+trace(H'*H-eye(kc));
+mintrace=min(trall);
 
-if maxModDenSup==ModDenSupj
+if mintrace==trall(j)  %%%% change j to r and remove %
    H_best{r}=H; 
    Hl_best{r}=Hl;   
-%    Sl_best{r}=Sl; 
+   Sl_best{r}=Sl; 
 %    Gl_best{r}=Gl; 
-   Clusters=ClustersSupra;
+   Clusters{r}=ClustersSupra;
 end
 
 end
 
-[ModDen_realization(r),~]= max(Mod_DenSup);
-clear Mod_DenSup
+% [ModDen_realization(r),~]= max(Mod_DenSup);
+% clear Mod_DenSup
 
+% clear trall tr %%% change if using more realizations
 end
 
 
