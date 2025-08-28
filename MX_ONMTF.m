@@ -89,7 +89,7 @@ for j=1:runs
 
 %% Finding Clusters
 
-[Il,ClustersSupra] = assigncomm(Alr,H,Hl,kc,k,kpl,L,'same');
+[Il,ClustersSupra] = assigncomm(Alr,H,Hl,kc,k,kpl,L,'same',1);
 
 %% NMI
 for l=1:L
@@ -124,3 +124,4 @@ averagedNMI=mean(NMI_realization);
 stdNMI=std(NMI_realization);
 
 end
+
