@@ -1,21 +1,71 @@
 # MX-ONMTF
-This is the code for the multiplex community detection method proposed in “Community detection in multiplex networks based on orthogonal nonnegative matrix tri-factorization”\
-Authors: Meiby Ortiz-Bouza and Selin Aviyente\
+
+Community detection in multiplex networks based on Orthogonal Nonnegative Matrix Tri-Factorization.
+
+**Authors:** Meiby Ortiz-Bouza and Selin Aviyente\
 Department of Electrical and Computer Engineering, Michigan State University, MI\
 https://ieeexplore.ieee.org/abstract/document/10385068
 
-## Introduction
-In this work, we introduce a new multiplex community detection method that identifies communities that are common across layers as well as those that are unique to each layer. The proposed method, Multiplex Orthogonal Nonnegative Matrix Tri-Factorization, represents the adjacency matrix of each layer as the sum of two low-rank matrix factorizations  corresponding to the common and private communities, respectively. Unlike most of the existing methods which require the number of communities to be pre-determined, the proposed method also introduces a two stage method to determine the number of common and private communities.
+## Overview
+
+MX-ONMTF is a multiplex community detection method that identifies communities that are **common** across layers as well as those that are **unique** (private) to each layer. The method represents the adjacency matrix of each layer as the sum of two low-rank matrix factorizations corresponding to the common and private communities, respectively. Unlike most existing methods which require the number of communities to be pre-determined, MX-ONMTF also introduces a two-stage method to determine the number of common and private communities.
 
 ![image](https://github.com/ortizbou/MX-ONMTF/assets/92049169/7c7631c5-eb38-4673-bc7d-c7d40d746bed)
 
-## Description and example
+## Repository Structure
 
-Step 1. Use ```findingk.m``` to find the number of common communities and the number of private and total communities per layer. If the number of communities is known, this step can be skipped.
-Step 2. Run the MX-ONMTF method that corresponds to your data, real or synthetic. For this, use the file ```Steps.mlx```
+```
+MX-ONMTF/
+├── matlab/                 # MATLAB implementation
+│   ├── MX_ONMTF.m          # Main algorithm (synthetic data with ground truth)
+│   ├── MX_ONMTF_real.m     # Main algorithm (real data, no ground truth)
+│   ├── ONMTF.m             # Single-layer baseline (synthetic)
+│   ├── ONMTF_real.m        # Single-layer baseline (real)
+│   ├── findingk.m          # Automatic community count detection
+│   ├── assigncomm.m        # Community assignment post-processing
+│   ├── patchmult.m         # Common community detection per layer
+│   ├── Steps.mlx           # Example workflow (MATLAB Live Script)
+│   └── helpers/
+│       ├── EigGap.m         # Eigenvalue gap method
+│       ├── ModDen.m         # Modularity Density metric
+│       ├── getNMI.m         # Normalized Mutual Information
+│       ├── normadj.m        # Normalized adjacency matrix
+│       ├── rnorm.m          # Row normalization
+│       └── vec.m            # Vectorization utility
+├── python/                 # Python implementation (coming soon)
+└── data/                   # Shared example data
+```
 
+## Usage (MATLAB)
 
+**Step 1.** Use `findingk.m` to find the number of common communities and the number of private and total communities per layer. If the number of communities is known, this step can be skipped.
 
-Cite as: M. Ortiz-Bouza and S. Aviyente, "Community Detection in Multiplex Networks Based on Orthogonal Nonnegative Matrix Tri-Factorization," in IEEE Access, vol. 12, pp. 6423-6436, 2024.
+```matlab
+[kc, k, kpl] = findingk(Al);
+```
 
+**Step 2.** Run the MX-ONMTF method that corresponds to your data:
 
+```matlab
+% For synthetic data with ground truth
+[H_best, Hl_best, NMI_real, avgNMI, stdNMI, Clusters] = MX_ONMTF(Alr, GTlr, k, kc, kpl);
+
+% For real data (no ground truth)
+[H_best, Hl_best, Clusters] = MX_ONMTF_real(Al, k, kc, kpl);
+```
+
+See `matlab/Steps.mlx` for a complete walkthrough.
+
+## Citation
+
+```bibtex
+@article{ortiz2024community,
+  title={Community Detection in Multiplex Networks Based on Orthogonal Nonnegative Matrix Tri-Factorization},
+  author={Ortiz-Bouza, Meiby and Aviyente, Selin},
+  journal={IEEE Access},
+  volume={12},
+  pages={6423--6436},
+  year={2024},
+  publisher={IEEE}
+}
+```
