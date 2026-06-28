@@ -1,11 +1,19 @@
 %%%%% Multiplex with common communities
 %%%%% L layers
-function [H_bestNMI,Hl_bestNMI,NMI_realization,averagedNMI,stdNMI, Clusters]=MX_ONMTF(Alr,GTlr,k,kc,kpl)
+function [H_bestNMI,Hl_bestNMI,NMI_realization,averagedNMI,stdNMI, Clusters]=MX_ONMTF(Alr,GTlr,k,kc,kpl,opts)
 %  Input: Alr is cell array with r realizations of the networks. Each cell contains another L cells array with the adjacency matrices of each layer
 %         k: L vector with the total number of communities per layer
 %         kc: number of common communities
 %         kpl: L vector with the number of private communities per layer
 %         communities membership matrices
+%  Optional name-value arguments:
+%         eta:            learning rate in (0,1], default 0.5
+%         runs:           number of independent runs per realization, default 20
+%         realizations:   number of network realizations, default 100
+%         max_iter:       maximum iterations per run, default 1000
+%         conv_thresh:    convergence threshold, default 1e-3
+%         assign_mode:    community assignment mode ('flex' or 'same'), default 'same'
+%         assign_perc:    threshold for common community assignment, default 1
 %  Output: H_bestNMI and Hl_bestNMI: the embedding matrices of the common and private communities with the best NMI for r realizations
 %          NMI_realization, averagedNMI, stdNMI:  NMI values at each realization and the average and standard deviation over these realizations, respectively.
 %          Clusters: n*L vector with the labels of the communities
@@ -15,23 +23,36 @@ function [H_bestNMI,Hl_bestNMI,NMI_realization,averagedNMI,stdNMI, Clusters]=MX_
 %  email: ortizbou@msu.edu
 %
 %
-%  Reference: 
-%  [1] “Community detection in multiplex networks based on orthogonal nonnegative matrix tri-factorization” Authors: Meiby Ortiz-Bouza and Selin Aviyente
+%  Reference:
+%  [1] "Community detection in multiplex networks based on orthogonal nonnegative matrix tri-factorization" Authors: Meiby Ortiz-Bouza and Selin Aviyente
 
-eta=0.5; %% learning rate between (0,1]
-realizations=100;
+arguments
+    Alr
+    GTlr
+    k
+    kc
+    kpl
+    opts.eta          (1,1) double = 0.5
+    opts.runs         (1,1) double = 20
+    opts.realizations (1,1) double = 100
+    opts.max_iter     (1,1) double = 1000
+    opts.conv_thresh  (1,1) double = 1e-3
+    opts.assign_mode  string       = "same"
+    opts.assign_perc  (1,1) double = 1
+end
 
-for r=1:realizations
+eta = opts.eta;
+
+for r=1:opts.realizations
 Al=Alr{r};
 GTl=GTlr{r};
 L=size(Al,2);
-n=size(Al{1},2); 
+n=size(Al{1},2);
 GTSup=vertcat(GTl{:});
 
 %% Running the code multiple times and finding NMI
-runs=20;
 
-for j=1:runs
+for j=1:opts.runs
     %% Initializing H1,H2,H,S1,S2,G1,G2
     for l=1:L
     Hl{l}=rand([n,kpl(l)]);
@@ -41,14 +62,14 @@ for j=1:runs
     H=rand([n,kc]);
 
     %% Iterative update
-    for i=1:1000
+    for i=1:opts.max_iter
         for l=1:L
             Hlnew{l}=Hl{l}.*((Al{l}*Hl{l}*Gl{l} + Hl{l}*Hl{l}'*H*Sl{l}*H'*Hl{l}*Gl{l}')./(H*Sl{l}*H'*Hl{l}*Gl{l} + Hl{l}*Hl{l}'*Al{l}*Hl{l}*Gl{l})).^eta;
             if all(isnan(Hlnew{l}),'all')==1
             Hlnew{l}=rand([n,kpl(l)]);
-            end  
+            end
         end
-        
+
         numH=0;
         denH=0;
         for l=1:L
@@ -64,7 +85,7 @@ for j=1:runs
             Slnew{l}=Sl{l}.*((H'*Al{l}*H)./(H'*H*Sl{l}*(H'*H) + H'*Hl{l}*Gl{l}*Hl{l}'*H)).^eta;
             if all(isnan(Slnew{l}),'all')==1
             Slnew{l}=diag(rand(kc,1));
-            end 
+            end
 
             Glnew{l}=Gl{l}.*((Hl{l}'*Al{l}*Hl{l})./(Hl{l}'*Hl{l}*Gl{l}*(Hl{l}'*Hl{l}) + Hl{l}'*H*Sl{l}*H'*Hl{l})).^eta;
             if all(isnan(Glnew{l}),'all')==1
@@ -74,13 +95,13 @@ for j=1:runs
 
         Hres=cellfun(@minus,Hl,Hlnew,'Un',0);
         Sres=cellfun(@minus,Sl,Slnew,'Un',0);
-        if (all(norm(Hres{l})<1e-3,'all') && ...
-             all(norm(Sres{l})<1e-3,'all') ...
-        && all(norm(H-Hnew)<1e-3,'all'))
+        if (all(norm(Hres{l})<opts.conv_thresh,'all') && ...
+             all(norm(Sres{l})<opts.conv_thresh,'all') ...
+        && all(norm(H-Hnew)<opts.conv_thresh,'all'))
             break
-        end    
-    
-        Hl=Hlnew;      
+        end
+
+        Hl=Hlnew;
         H=Hnew;
         Sl=Slnew;
         Gl=Glnew;
@@ -89,7 +110,7 @@ for j=1:runs
 
 %% Finding Clusters
 
-[Il,ClustersSupra] = assigncomm(Alr,H,Hl,kc,k,kpl,L,'same',1);
+[Il,ClustersSupra] = assigncomm(Alr,H,Hl,kc,k,kpl,L,opts.assign_mode,opts.assign_perc);
 
 %% NMI
 for l=1:L
@@ -101,16 +122,16 @@ NMI_sup(j)=NMIsupj;
 maxNMI=max(NMI_sup);
 
 if maxNMI==NMIsupj
-   H_bestNMI{r}=H; 
-   Hl_bestNMI{r}=Hl;   
-%    Sl_bestNMI{r}=Sl; 
-%    Gl_bestNMI{r}=Gl; 
+   H_bestNMI{r}=H;
+   Hl_bestNMI{r}=Hl;
+%    Sl_bestNMI{r}=Sl;
+%    Gl_bestNMI{r}=Gl;
     Clusters=ClustersSupra;
-end   
+end
 
 if norm(maxNMI-1)<1e-3
     break
-end 
+end
 
 
 end
@@ -124,4 +145,3 @@ averagedNMI=mean(NMI_realization);
 stdNMI=std(NMI_realization);
 
 end
-
