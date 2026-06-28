@@ -58,6 +58,38 @@ arguments
     opts.assign_perc  (1,1) double = 0.8
 end
 
+%% Input validation
+assert(iscell(Alr), 'MX_ONMTF:invalidInput', 'Alr must be a cell array.');
+assert(isscalar(kc) && kc > 0 && kc == round(kc), ...
+    'MX_ONMTF:invalidInput', 'kc must be a positive integer.');
+assert(all(k > 0) && all(k == round(k)), ...
+    'MX_ONMTF:invalidInput', 'k must contain positive integers.');
+assert(all(kpl >= 0) && all(kpl == round(kpl)), ...
+    'MX_ONMTF:invalidInput', 'kpl must contain non-negative integers.');
+assert(length(k) == length(kpl), ...
+    'MX_ONMTF:invalidInput', 'k and kpl must have the same length (one entry per layer).');
+assert(opts.eta > 0 && opts.eta <= 1, ...
+    'MX_ONMTF:invalidInput', 'eta must be in (0, 1].');
+assert(opts.assign_perc >= 0 && opts.assign_perc <= 1, ...
+    'MX_ONMTF:invalidInput', 'assign_perc must be in [0, 1].');
+assert(ismember(opts.assign_mode, ["flex", "same"]), ...
+    'MX_ONMTF:invalidInput', 'assign_mode must be ''flex'' or ''same''.');
+
+% Validate adjacency matrices
+if opts.realizations > 1
+    Al_check = Alr{1};
+else
+    Al_check = Alr;
+end
+L_check = size(Al_check, 2);
+n_check = size(Al_check{1}, 2);
+for l_check = 1:L_check
+    assert(size(Al_check{l_check}, 1) == size(Al_check{l_check}, 2), ...
+        'MX_ONMTF:invalidInput', 'Adjacency matrix for layer %d is not square.', l_check);
+    assert(size(Al_check{l_check}, 1) == n_check, ...
+        'MX_ONMTF:invalidInput', 'All layers must have the same number of nodes.');
+end
+
 eta = opts.eta;
 use_nmi = ~isempty(opts.ground_truth);
 

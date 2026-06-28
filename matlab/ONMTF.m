@@ -36,6 +36,14 @@ arguments
     opts.conv_thresh  (1,1) double = 1e-3
 end
 
+%% Input validation
+assert(ismatrix(A) && size(A,1) == size(A,2), ...
+    'ONMTF:invalidInput', 'A must be a square matrix.');
+assert(isscalar(k) && k > 0 && k == round(k), ...
+    'ONMTF:invalidInput', 'k must be a positive integer.');
+assert(opts.eta > 0 && opts.eta <= 1, ...
+    'ONMTF:invalidInput', 'eta must be in (0, 1].');
+
 eta = opts.eta;
 use_nmi = ~isempty(opts.ground_truth);
 [~,n] = size(A);

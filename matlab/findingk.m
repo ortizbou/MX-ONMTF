@@ -11,6 +11,17 @@
 
 function [kc,k,kpl]=findingk(Al)
 
+%% Input validation
+assert(iscell(Al), 'findingk:invalidInput', 'Al must be a cell array.');
+assert(~isempty(Al), 'findingk:invalidInput', 'Al must not be empty.');
+n = size(Al{1}, 1);
+for l_check = 1:length(Al)
+    assert(size(Al{l_check}, 1) == size(Al{l_check}, 2), ...
+        'findingk:invalidInput', 'Adjacency matrix for layer %d is not square.', l_check);
+    assert(size(Al{l_check}, 1) == n, ...
+        'findingk:invalidInput', 'All layers must have the same number of nodes.');
+end
+
 L=size(Al,2);
 
 for l=1:L

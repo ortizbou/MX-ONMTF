@@ -4,6 +4,17 @@ function [Il,ClustersSupra]=assigncomm(Al,H,Hl,kc,k,kpl,L,mode,perc)
 %  Address: Michigan State University, ECE
 %  email: ortizbou@msu.edu
 
+%% Input validation
+assert(iscell(Al), 'assigncomm:invalidInput', 'Al must be a cell array.');
+assert(isscalar(kc) && kc >= 0, ...
+    'assigncomm:invalidInput', 'kc must be a non-negative scalar.');
+assert(isscalar(L) && L > 0 && L == round(L), ...
+    'assigncomm:invalidInput', 'L must be a positive integer.');
+assert(strcmp(mode, 'flex') || strcmp(mode, 'same'), ...
+    'assigncomm:invalidInput', 'mode must be ''flex'' or ''same''.');
+assert(isscalar(perc) && perc >= 0 && perc <= 1, ...
+    'assigncomm:invalidInput', 'perc must be in [0, 1].');
+
 [n,~]=size(H);
 
 for l=1:L
