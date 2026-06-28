@@ -18,8 +18,7 @@ MX-ONMTF is a multiplex community detection method that identifies communities t
 MX-ONMTF/
 ├── matlab/                 # MATLAB implementation
 │   ├── MX_ONMTF.m          # Main algorithm (unified: synthetic + real)
-│   ├── ONMTF.m             # Single-layer baseline (synthetic)
-│   ├── ONMTF_real.m        # Single-layer baseline (real)
+│   ├── ONMTF.m             # Single-layer baseline (unified: NMI or ModDen)
 │   ├── findingk.m          # Automatic community count detection
 │   ├── assigncomm.m        # Community assignment post-processing
 │   ├── patchmult.m         # Common community detection per layer
