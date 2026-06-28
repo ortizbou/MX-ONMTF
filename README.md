@@ -22,7 +22,9 @@ MX-ONMTF/
 │   ├── findingk.m          # Automatic community count detection
 │   ├── assigncomm.m        # Community assignment post-processing
 │   ├── patchmult.m         # Common community detection per layer
-│   ├── Steps.mlx           # Example workflow (MATLAB Live Script)
+│   ├── examples/
+│   │   ├── demo_synthetic.m # Example with synthetic data + ground truth
+│   │   └── demo_real.m      # Example with real data (no ground truth)
 │   └── helpers/
 │       ├── EigGap.m         # Eigenvalue gap method
 │       ├── ModDen.m         # Modularity Density metric
@@ -55,7 +57,7 @@ results = MX_ONMTF(Alr, k, kc, kpl, 'ground_truth', GTlr, 'realizations', 100);
 results = MX_ONMTF(Al, k, kc, kpl, 'eta', 0.3, 'max_iter', 5000);
 ```
 
-See `matlab/Steps.mlx` for a complete walkthrough.
+See `matlab/examples/demo_synthetic.m` and `matlab/examples/demo_real.m` for complete walkthroughs.
 
 ## Citation
 
