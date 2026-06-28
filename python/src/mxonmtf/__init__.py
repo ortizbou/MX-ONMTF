@@ -10,6 +10,7 @@ Reference:
 """
 
 from mxonmtf.metrics import modularity_density, normalized_mutual_information
+from mxonmtf.parameter_selection import eiggap, findingk
 from mxonmtf.utils import normalized_adjacency, row_normalize
 
 __version__ = "0.1.0"
