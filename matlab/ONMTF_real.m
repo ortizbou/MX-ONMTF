@@ -29,10 +29,10 @@ for i=1:1000
     U1new=U1.*((A*U1*C1')./(U1*U1'*A*U1*C1')).^eta; 
     C1new=C1.*((U1'*A*U1)./(U1'*U1*C1*(U1'*U1))).^eta;
     if all(isnan(U1new),'all')==1
-        U1new=rand([n,k1]);
-    end  
+        U1new=rand([n,k]);
+    end
     if all(isnan(C1new),'all')==1
-        C1new=rand([k1,k1]);
+        C1new=rand([k,k]);
     end  
     if (all(norm(U1-U1new)<1e-6,'all') && all(norm(C1-C1new)<1e-6,'all'))
         break
