@@ -17,8 +17,7 @@ for l=1:L
     %% Find k_l
     k(l)=EigGap(Al{l});
     %% Find Ul
-%     [U{l},NMI(l)]=ONMTF(Al{l},GTl{l},k(l)); %%% for synthetic networks
-    U{l}=ONMTF_real(Al{l},k(l)); %%% for real networks
+    [U{l},~] = ONMTF(Al{l}, k(l));
 end
 
 X=[U{:}]';
