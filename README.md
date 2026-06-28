@@ -16,48 +16,101 @@ MX-ONMTF is a multiplex community detection method that identifies communities t
 
 ```
 MX-ONMTF/
-├── matlab/                 # MATLAB implementation
-│   ├── MX_ONMTF.m          # Main algorithm (unified: synthetic + real)
-│   ├── ONMTF.m             # Single-layer baseline (unified: NMI or ModDen)
-│   ├── findingk.m          # Automatic community count detection
-│   ├── assigncomm.m        # Community assignment post-processing
-│   ├── patchmult.m         # Common community detection per layer
+├── matlab/                        # MATLAB implementation
+│   ├── MX_ONMTF.m                  # Main algorithm (unified: synthetic + real)
+│   ├── ONMTF.m                     # Single-layer baseline (unified: NMI or ModDen)
+│   ├── findingk.m                  # Automatic community count detection
+│   ├── assigncomm.m                # Community assignment post-processing
+│   ├── patchmult.m                 # Common community detection per layer
 │   ├── examples/
-│   │   ├── demo_synthetic.m # Example with synthetic data + ground truth
-│   │   └── demo_real.m      # Example with real data (no ground truth)
+│   │   ├── demo_synthetic.m         # Example with synthetic data + ground truth
+│   │   └── demo_real.m              # Example with real data (no ground truth)
 │   └── helpers/
-│       ├── EigGap.m         # Eigenvalue gap method
-│       ├── ModDen.m         # Modularity Density metric
-│       ├── getNMI.m         # Normalized Mutual Information
-│       ├── normadj.m        # Normalized adjacency matrix
-│       ├── rnorm.m          # Row normalization
-│       └── vec.m            # Vectorization utility
-├── python/                 # Python implementation (coming soon)
-└── data/                   # Shared example data
+│       ├── EigGap.m                 # Eigenvalue gap method
+│       ├── ModDen.m                 # Modularity Density metric
+│       ├── getNMI.m                 # Normalized Mutual Information
+│       ├── normadj.m                # Normalized adjacency matrix
+│       ├── rnorm.m                  # Row normalization
+│       └── vec.m                    # Vectorization utility
+├── python/                        # Python implementation
+│   ├── pyproject.toml               # Package metadata and dependencies
+│   ├── src/mxonmtf/
+│   │   ├── factorization.py         # Core MX-ONMTF algorithm
+│   │   ├── single_layer.py          # Single-layer ONMTF baseline
+│   │   ├── community.py             # Community assignment post-processing
+│   │   ├── parameter_selection.py   # Automatic parameter selection (findingk)
+│   │   ├── metrics.py               # NMI and Modularity Density
+│   │   └── utils.py                 # Graph utilities
+│   ├── tests/                       # pytest test suite
+│   └── examples/
+│       └── tutorial.py              # End-to-end tutorial script
+└── data/                          # Shared example data
 ```
 
-## Usage (MATLAB)
+## Installation
 
-**Step 1.** Use `findingk.m` to find the number of common communities and the number of private and total communities per layer. If the number of communities is known, this step can be skipped.
+### Python
+
+```bash
+cd python
+pip install -e .          # basic install
+pip install -e ".[dev]"   # with dev tools (pytest, ruff)
+```
+
+Requires Python >= 3.9, NumPy >= 1.22, SciPy >= 1.8.
+
+### MATLAB
+
+No installation needed. Add `matlab/` and `matlab/helpers/` to your MATLAB path.
+
+## Quick Start
+
+### Python
+
+```python
+import numpy as np
+from mxonmtf import mx_onmtf, findingk
+
+# Al is a list of adjacency matrices (one per layer)
+# Step 1: Find community counts (or set manually)
+kc, k, kpl = findingk(Al)
+
+# Step 2: Run MX-ONMTF
+# Real data (trace minimization)
+result = mx_onmtf(Al, k=k, kc=kc, kpl=kpl)
+
+# Synthetic data (NMI selection)
+result = mx_onmtf(Al, k=k, kc=kc, kpl=kpl, ground_truth=labels)
+
+# Access results
+result.H_best       # common community factor matrices
+result.Hl_best      # private community factor matrices
+result.Clusters     # community labels
+result.averagedNMI  # NMI (when ground_truth provided)
+```
+
+See `python/examples/tutorial.py` for a complete walkthrough.
+
+### MATLAB
 
 ```matlab
+% Step 1: Find community counts
 [kc, k, kpl] = findingk(Al);
-```
 
-**Step 2.** Run MX-ONMTF:
-
-```matlab
-% For real data (no ground truth) — uses trace minimization
-results = MX_ONMTF(Al, k, kc, kpl);
-
-% For synthetic data with ground truth — uses NMI for solution selection
-results = MX_ONMTF(Alr, k, kc, kpl, 'ground_truth', GTlr, 'realizations', 100);
-
-% Override any parameter
-results = MX_ONMTF(Al, k, kc, kpl, 'eta', 0.3, 'max_iter', 5000);
+% Step 2: Run MX-ONMTF
+results = MX_ONMTF(Al, k, kc, kpl);                                        % real data
+results = MX_ONMTF(Al, k, kc, kpl, 'ground_truth', GTl, 'realizations', 100); % synthetic
+results = MX_ONMTF(Al, k, kc, kpl, 'eta', 0.3, 'max_iter', 5000);          % custom params
 ```
 
 See `matlab/examples/demo_synthetic.m` and `matlab/examples/demo_real.m` for complete walkthroughs.
+
+## Testing
+
+```bash
+cd python
+pytest -v    # 49 tests
+```
 
 ## Citation
 
