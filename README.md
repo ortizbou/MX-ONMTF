@@ -17,8 +17,7 @@ MX-ONMTF is a multiplex community detection method that identifies communities t
 ```
 MX-ONMTF/
 ├── matlab/                 # MATLAB implementation
-│   ├── MX_ONMTF.m          # Main algorithm (synthetic data with ground truth)
-│   ├── MX_ONMTF_real.m     # Main algorithm (real data, no ground truth)
+│   ├── MX_ONMTF.m          # Main algorithm (unified: synthetic + real)
 │   ├── ONMTF.m             # Single-layer baseline (synthetic)
 │   ├── ONMTF_real.m        # Single-layer baseline (real)
 │   ├── findingk.m          # Automatic community count detection
@@ -44,14 +43,17 @@ MX-ONMTF/
 [kc, k, kpl] = findingk(Al);
 ```
 
-**Step 2.** Run the MX-ONMTF method that corresponds to your data:
+**Step 2.** Run MX-ONMTF:
 
 ```matlab
-% For synthetic data with ground truth
-[H_best, Hl_best, NMI_real, avgNMI, stdNMI, Clusters] = MX_ONMTF(Alr, GTlr, k, kc, kpl);
+% For real data (no ground truth) — uses trace minimization
+results = MX_ONMTF(Al, k, kc, kpl);
 
-% For real data (no ground truth)
-[H_best, Hl_best, Clusters] = MX_ONMTF_real(Al, k, kc, kpl);
+% For synthetic data with ground truth — uses NMI for solution selection
+results = MX_ONMTF(Alr, k, kc, kpl, 'ground_truth', GTlr, 'realizations', 100);
+
+% Override any parameter
+results = MX_ONMTF(Al, k, kc, kpl, 'eta', 0.3, 'max_iter', 5000);
 ```
 
 See `matlab/Steps.mlx` for a complete walkthrough.
