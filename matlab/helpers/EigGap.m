@@ -1,6 +1,14 @@
-function k=EigGap(A)
+function k=EigGap(A,opts)
+%  Determines optimal number of communities using eigenvalue gap method.
+%
+%  Optional name-value arguments:
+%         eiggap_thresh:  fraction of max gap used as threshold, default 0.95
 
-% realizations=size(Ar,1);
+arguments
+    A
+    opts.eiggap_thresh (1,1) double = 0.95
+end
+
 n=size(A,2);
 dens=2*sum(A,'all')/(n*(n-1));
 rand('seed',100); % reseed so you get a similar picture
@@ -13,9 +21,9 @@ dn=abs(diag(Dn));
 dn=sort(dn,'descend');
 for i=1:n-1
     dif(i)=dn(i)-dn(i+1);
-end    
+end
 dif(1)=0;
-delta=0.95*max(dif);
+delta=opts.eiggap_thresh*max(dif);
 
 % Perform the eigenvalue decomposition
 [V,D] = eig(double(A));
@@ -38,4 +46,3 @@ end
 
 % k=mode(k);
 end
-
