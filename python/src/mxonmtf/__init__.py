@@ -9,6 +9,8 @@ Reference:
     vol. 12, pp. 6423-6436, 2024.
 """
 
+from mxonmtf.community import assign_communities, patchmult
+from mxonmtf.factorization import MXONMTFResult, mx_onmtf
 from mxonmtf.metrics import modularity_density, normalized_mutual_information
 from mxonmtf.parameter_selection import eiggap, findingk
 from mxonmtf.single_layer import onmtf
