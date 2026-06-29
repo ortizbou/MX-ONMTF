@@ -26,14 +26,65 @@ _EPS = 1e-16  # small constant to avoid division by zero
 
 @dataclass
 class MXONMTFResult:
-    """Container for MX-ONMTF results."""
+    """Container for MX-ONMTF results.
 
-    H_best: list[np.ndarray] = field(default_factory=list)
-    Hl_best: list[list[np.ndarray]] = field(default_factory=list)
-    Clusters: list[np.ndarray] = field(default_factory=list)
-    NMI_realization: list[float] = field(default_factory=list)
+    Attributes
+    ----------
+    H : np.ndarray or None
+        Common community factor matrix (n x kc).
+    Hl : list[np.ndarray] or None
+        Private community factor matrices, one per layer (each n x kpl[l]).
+    labels_per_layer : list[np.ndarray]
+        Community labels for each layer (each length n, 1-indexed).
+    clusters_supra : np.ndarray or None
+        Concatenated community labels across all layers (length n*L).
+    averagedNMI : float or None
+        Best NMI across runs (when ground_truth provided).
+    """
+
+    H: np.ndarray | None = None
+    Hl: list[np.ndarray] | None = None
+    labels_per_layer: list[np.ndarray] = field(default_factory=list)
+    clusters_supra: np.ndarray | None = None
     averagedNMI: float | None = None
-    stdNMI: float | None = None
+
+    def get_layer_labels(self, layer: int) -> np.ndarray:
+        """Return community labels for a specific layer.
+
+        Parameters
+        ----------
+        layer : int
+            Layer index (0-indexed).
+
+        Returns
+        -------
+        np.ndarray
+            Community labels (length n, 1-indexed).
+        """
+        if not self.labels_per_layer:
+            raise ValueError("No per-layer labels available.")
+        return self.labels_per_layer[layer]
+
+    def summary(self) -> str:
+        """Return a human-readable summary of the results."""
+        lines = ["MX-ONMTF Results"]
+        lines.append("-" * 40)
+
+        if self.labels_per_layer:
+            L = len(self.labels_per_layer)
+            lines.append(f"Layers: {L}")
+            for l, lbl in enumerate(self.labels_per_layer):
+                unique, counts = np.unique(lbl[lbl > 0], return_counts=True)
+                sizes = ", ".join(f"{int(u)}:{int(c)}" for u, c in zip(unique, counts))
+                lines.append(f"  Layer {l}: {len(unique)} communities ({sizes})")
+
+        if self.averagedNMI is not None:
+            lines.append(f"NMI: {self.averagedNMI:.4f}")
+
+        if self.H is not None:
+            lines.append(f"H shape: {self.H.shape}")
+
+        return "\n".join(lines)
 
 
 def mx_onmtf(
@@ -209,9 +260,10 @@ def mx_onmtf(
             NMI_sup[j] = nmi_sup_j
 
             if nmi_sup_j >= np.max(NMI_sup[:j + 1]):
-                result.H_best = [H]
-                result.Hl_best = [Hl]
-                result.Clusters = [clusters_supra]
+                result.H = H
+                result.Hl = Hl
+                result.labels_per_layer = Il
+                result.clusters_supra = clusters_supra
 
             if abs(np.max(NMI_sup[:j + 1]) - 1.0) < 1e-3:
                 break
@@ -226,14 +278,13 @@ def mx_onmtf(
             trace_all[j] = tr_val
 
             if tr_val <= np.min(trace_all[:j + 1]):
-                result.H_best = [H]
-                result.Hl_best = [Hl]
-                result.Clusters = [clusters_supra]
+                result.H = H
+                result.Hl = Hl
+                result.labels_per_layer = Il
+                result.clusters_supra = clusters_supra
 
     if use_nmi:
         best_nmi = np.max(NMI_sup[NMI_sup > -np.inf])
-        result.NMI_realization = [best_nmi]
         result.averagedNMI = best_nmi
-        result.stdNMI = 0.0
 
     return result

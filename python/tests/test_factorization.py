@@ -30,8 +30,8 @@ class TestMXONMTF:
             Al, k=np.array([2, 2]), kc=2, kpl=np.array([0, 0]),
             runs=2, max_iter=50, rng=np.random.default_rng(42)
         )
-        assert len(result.Clusters) > 0
-        assert len(result.H_best) > 0
+        assert result.clusters_supra is not None
+        assert result.H is not None
 
     def test_nmi_mode_with_ground_truth(self, planted_partition_graph):
         """With ground truth, should use NMI and return NMI stats."""
@@ -54,7 +54,7 @@ class TestMXONMTF:
             [A1, A2], k=np.array([3, 3]), kc=2, kpl=np.array([1, 1]),
             runs=2, max_iter=50, rng=np.random.default_rng(42)
         )
-        assert len(result.Clusters) > 0
+        assert result.clusters_supra is not None
 
     def test_reproducible(self, planted_partition_graph):
         """Same rng should produce same result."""
@@ -65,7 +65,41 @@ class TestMXONMTF:
         )
         r1 = mx_onmtf(Al, **kwargs, rng=np.random.default_rng(99))
         r2 = mx_onmtf(Al, **kwargs, rng=np.random.default_rng(99))
-        np.testing.assert_array_equal(r1.H_best[0], r2.H_best[0])
+        np.testing.assert_array_equal(r1.H, r2.H)
+
+    def test_labels_per_layer(self, planted_partition_graph):
+        """Should return per-layer labels."""
+        Al, _ = self._make_multiplex(planted_partition_graph)
+        result = mx_onmtf(
+            Al, k=np.array([2, 2]), kc=2, kpl=np.array([0, 0]),
+            runs=2, max_iter=50, rng=np.random.default_rng(42)
+        )
+        assert len(result.labels_per_layer) == 2
+        assert len(result.labels_per_layer[0]) == 40
+        assert len(result.labels_per_layer[1]) == 40
+
+    def test_get_layer_labels(self, planted_partition_graph):
+        """get_layer_labels should return labels for specific layer."""
+        Al, _ = self._make_multiplex(planted_partition_graph)
+        result = mx_onmtf(
+            Al, k=np.array([2, 2]), kc=2, kpl=np.array([0, 0]),
+            runs=2, max_iter=50, rng=np.random.default_rng(42)
+        )
+        lbl = result.get_layer_labels(0)
+        assert len(lbl) == 40
+        np.testing.assert_array_equal(lbl, result.labels_per_layer[0])
+
+    def test_summary(self, planted_partition_graph):
+        """summary() should return a non-empty string."""
+        Al, GTl = self._make_multiplex(planted_partition_graph)
+        result = mx_onmtf(
+            Al, k=np.array([2, 2]), kc=2, kpl=np.array([0, 0]),
+            ground_truth=GTl,
+            runs=2, max_iter=50, rng=np.random.default_rng(42)
+        )
+        s = result.summary()
+        assert "MX-ONMTF Results" in s
+        assert "NMI" in s
 
     def test_validation_bad_eta(self):
         """Should raise ValueError for eta out of range."""
