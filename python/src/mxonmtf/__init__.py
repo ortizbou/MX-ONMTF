@@ -10,6 +10,7 @@ Reference:
 """
 
 from mxonmtf.community import assign_communities, patchmult
+from mxonmtf.evaluation import evaluate
 from mxonmtf.factorization import MXONMTFResult, mx_onmtf
 from mxonmtf.io import load_layers, save_results, validate_multiplex
 from mxonmtf.metrics import modularity_density, normalized_mutual_information
